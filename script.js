@@ -7,6 +7,7 @@ let pvArray;
 let numbers;
 let ranks;
 let critvals;
+let signif;
 
 function makeDataTableElements() {
     pvArray = pvalues.value.split(",").map(Number);
@@ -44,31 +45,27 @@ function makeDataTableElements() {
     }
     critvals = critvals.map(x => Math.round(x*1000)/1000);
 
-    updateTable()
-}
-document.addEventListener("DOMContentLoaded", makeDataTableElements);
-pvalues.addEventListener("input", makeDataTableElements);
-alpha.addEventListener("input", makeDataTableElements);
-sortpvals.addEventListener("input", makeDataTableElements);
-if (document.querySelector('input[name="procedure"]')) {
-    document.querySelectorAll('input[name="procedure"]').forEach((elem) => {
-        elem.addEventListener("change", makeDataTableElements);
-    });
-}
-
-function updateTable() {
-
-    // Get significance
     let largest = 0;
     for (let i = 0; i < pvArray.length; i++) {
         if (pvArray[i] <= critvals[i] && (pvArray[i] > largest)) {
             largest = pvArray[i];
         }
     }
-    let signif = pvArray.map(x => x <= largest)
+    signif = pvArray.map(x => x <= largest)
     signif = signif.map(value => value ? "Yes" : "No");
 
+    updateTable()
+}
 
+// Evaluate when page loads
+document.addEventListener("DOMContentLoaded", makeDataTableElements);
+
+// Track any changes in input
+pvalues.addEventListener("input", makeDataTableElements);
+// Most of the change trackers are in the HTML, but for this one, this approach
+// makes it more instanteous
+
+function updateTable() {
     // Reset table
     if (yekutieli.checked) {
         resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> rank </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
@@ -117,11 +114,6 @@ function getRankingWithoutSorting(array, ascending = true) {
     return ranks;
 }
 
-// Update table on load
-document.addEventListener('DOMContentLoaded', function() {
-    updateTable()
-}, false);
-
 
 // Set up the SVG container
 const margin = {top: 10, right: 30, bottom: 30, left: 60},
@@ -134,48 +126,48 @@ const svg = d3.select("#plot-container").append("svg")
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// // Convert to a singless array
-// var data = numbers.map(function(val1, index) {
-//     return {
-//         number: val1,
-//         pv: pvArray[index],
-//         rank: ranks[index],
-//         critval: critvals[index],
-//         signif: signif[index]
-//     };
-// });
+// Convert to a single array
+var data = numbers.map(function(val1, index) {
+    return {
+        number: val1,
+        pv: pvArray[index],
+        rank: ranks[index],
+        critval: critvals[index],
+        signif: signif[index]
+    };
+});
 
-// // Set up scales
-// const x = d3.scaleLinear()
-//       .domain([1, pvArray.length])
-//       .range([40, width - 40]);
-// svg.append("g")
-//     .attr("transform", `translate(0, ${height})`)
-//     .call(d3.axisBottom(x));
+// Set up scales
+const x = d3.scaleLinear()
+      .domain([1, pvArray.length])
+      .range([40, width - 40]);
+svg.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x));
 
-// const y = d3.scaleLinear()
-//       .domain([0, Math.max(...pvArray.concat(critvals))])
-//       .range([height - 40, 40]);
-// svg.append("g")
-//     .call(d3.axisLeft(y));
+const y = d3.scaleLinear()
+      .domain([0, Math.max(...pvArray.concat(critvals))])
+      .range([height - 40, 40]);
+svg.append("g")
+    .call(d3.axisLeft(y));
 
-// // Create circles for scatter plot
-// svg.append("g")
-//     .selectAll("circle")
-//     .data(data)
-//     .join("circle")
-//     .attr("cx", function (d, i) { return x(i + 1); } )
-//     .attr("cy", function (d) { return y(d.pv); } )
-//     .attr("r", 4)
-//     .style("fill", d => (d.signif === "Yes") ? "blue" : "red");
+// Create circles for scatter plot
+svg.append("g")
+    .selectAll("circle")
+    .data(data)
+    .join("circle")
+    .attr("cx", function (d, i) { return x(i + 1); } )
+    .attr("cy", function (d) { return y(d.pv); } )
+    .attr("r", 4)
+    .style("fill", d => (d.signif === "Yes") ? "blue" : "red");
 
-// // Create line plot
-// svg.append("path")
-//     .datum(data)
-//     .attr("fill", "none")
-//     .attr("stroke", "black")
-//     .attr("stroke-width", 1.5)
-//     .attr("d", d3.line()
-//           .x(function(d, i) { return x(i + 1) })
-//           .y(function(d) { return y(d.critval) })
-//          )
+// Create line plot
+svg.append("path")
+    .datum(data)
+    .attr("fill", "none")
+    .attr("stroke", "black")
+    .attr("stroke-width", 1.5)
+    .attr("d", d3.line()
+          .x(function(d, i) { return x(i + 1) })
+          .y(function(d) { return y(d.critval) })
+         )
