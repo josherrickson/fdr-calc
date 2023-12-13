@@ -1,0 +1,22 @@
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust:100%
+}
+
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px !important;
+    line-height: 1.42857143;
+    color: #333;
+    margin:0
+}
+
+p {
+  text-align: left;
+}
+
+h1 {
+    font-size: 2em;
+    margin:.67em 0
+}
