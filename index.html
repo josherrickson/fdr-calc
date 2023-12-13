@@ -65,11 +65,13 @@
           may make it more clear what the B-H procedure is doing (especially in
           the plot). This is for display purposes only and does not affect the
           calculations.<br />
-          <input type="checkbox"
-                 value="sortpvals"
-                 id="sortpvals"
-                 checked
-                 onChange="updateTable()">Sort p-values?
+          <label>
+            <input type="checkbox"
+                   value="sortpvals"
+                   id="sortpvals"
+                   checked
+                   onChange="updateTable()">Sort p-values?
+          </label>
         </p>
         <!-- <button type = "button" onclick="updateTable()">Submit</button> -->
 
@@ -100,7 +102,6 @@
       <div id="plot-container"></div>
     </div>
 
-    <script src="plot.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

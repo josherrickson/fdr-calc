@@ -1,22 +1,24 @@
-function updateTable() {
-    const resultTable = document.getElementById("resultTable");
-    const alpha = document.getElementById("alpha");
+const resultTable = document.getElementById("resultTable");
+let alpha = document.getElementById("alpha");
+let sortpvals = document.getElementById("sortpvals");
 
-    // Get p-values and clean them
-    const pvalues = document.getElementById("pvalues");
-    // Split string and convert to numeric
-    let pvArray = pvalues.value.split(",").map(Number);
+let pvalues = document.getElementById("pvalues");
+let pvArray;
+let numbers;
+let ranks;
+let critvals;
+
+function makeDataTableElements() {
+    pvArray = pvalues.value.split(",").map(Number);
     // Drop any non-numeric
     pvArray = pvArray.filter(element => !isNaN(element));
     // Drop outside of (0,1]
     pvArray = pvArray.filter(element => element > 0 & element <= 1);
 
     // generate entry numbers
-    let numbers = pvArray.map((_, index) => index + 1);
+    numbers = pvArray.map((_, index) => index + 1);
 
     // Generate Ranks
-    const sortpvals = document.getElementById("sortpvals");
-    let ranks
     let tmparray;
     if (sortpvals.checked) {
         // Need to sort both pvalues and entry numbers
@@ -35,13 +37,26 @@ function updateTable() {
 
     // Define critical values
     const numpvals = pvArray.length
-    let critvals = ranks.map(x => x*alpha.valueAsNumber/numpvals);
+    critvals = ranks.map(x => x*alpha.valueAsNumber/numpvals);
     const digamma1 = -0.5772156649015328606065120900824024310421593359399
     if (yekutieli.checked) {
         critvals = critvals.map(x => x / (Math.log(numpvals) - digamma1 + 1/(2*numpvals)))
     }
     critvals = critvals.map(x => Math.round(x*1000)/1000);
 
+    updateTable()
+}
+document.addEventListener("DOMContentLoaded", makeDataTableElements);
+pvalues.addEventListener("input", makeDataTableElements);
+alpha.addEventListener("input", makeDataTableElements);
+sortpvals.addEventListener("input", makeDataTableElements);
+if (document.querySelector('input[name="procedure"]')) {
+    document.querySelectorAll('input[name="procedure"]').forEach((elem) => {
+        elem.addEventListener("change", makeDataTableElements);
+    });
+}
+
+function updateTable() {
 
     // Get significance
     let largest = 0;
@@ -58,7 +73,7 @@ function updateTable() {
     if (yekutieli.checked) {
         resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> rank </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
     } else {
-        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> rank </th> <th style="text-align: center;"> B-K Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> rank </th> <th style="text-align: center;"> B-H Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
     }
 
     // Fill up the table
@@ -80,8 +95,6 @@ function updateTable() {
         cell3.textContent = critvals[i];
         cell4.textContent = signif[i];
     }
-
-    drawPlot(numbers, pvArray, ranks, critvals, signif, width, height);
 
 }
 
@@ -120,3 +133,49 @@ const svg = d3.select("#plot-container").append("svg")
       .attr("height", height + margin.top + margin.bottom)
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+// // Convert to a singless array
+// var data = numbers.map(function(val1, index) {
+//     return {
+//         number: val1,
+//         pv: pvArray[index],
+//         rank: ranks[index],
+//         critval: critvals[index],
+//         signif: signif[index]
+//     };
+// });
+
+// // Set up scales
+// const x = d3.scaleLinear()
+//       .domain([1, pvArray.length])
+//       .range([40, width - 40]);
+// svg.append("g")
+//     .attr("transform", `translate(0, ${height})`)
+//     .call(d3.axisBottom(x));
+
+// const y = d3.scaleLinear()
+//       .domain([0, Math.max(...pvArray.concat(critvals))])
+//       .range([height - 40, 40]);
+// svg.append("g")
+//     .call(d3.axisLeft(y));
+
+// // Create circles for scatter plot
+// svg.append("g")
+//     .selectAll("circle")
+//     .data(data)
+//     .join("circle")
+//     .attr("cx", function (d, i) { return x(i + 1); } )
+//     .attr("cy", function (d) { return y(d.pv); } )
+//     .attr("r", 4)
+//     .style("fill", d => (d.signif === "Yes") ? "blue" : "red");
+
+// // Create line plot
+// svg.append("path")
+//     .datum(data)
+//     .attr("fill", "none")
+//     .attr("stroke", "black")
+//     .attr("stroke-width", 1.5)
+//     .attr("d", d3.line()
+//           .x(function(d, i) { return x(i + 1) })
+//           .y(function(d) { return y(d.critval) })
+//          )
