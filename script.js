@@ -41,10 +41,15 @@ function updateTable() {
         }
     }
     let signif = pvArray.map(x => x <= largest)
+    signif = signif.map(value => value ? "Yes" : "No");
 
 
     // Reset table
-    resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> p-value </th> <th style="text-align: right;"> Rank </th> <th style="text-align: center;"> BH Critical Value </th> <th style="text-align: left;"> Significant? </th> </tr> </thead> ';
+    if (yekutieli.checked) {
+        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+    } else {
+        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> B-H Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+    }
 
     // Fill up the table
     for (let i = 0; i < pvArray.length; i++) {
@@ -58,8 +63,8 @@ function updateTable() {
         const cell3 = row.insertCell(3);
 
         // Set the content of the cell to the current number
-        cell0.textContent = pvArray[i];
-        cell1.textContent = ranks[i];
+        cell0.textContent = ranks[i];
+        cell1.textContent = pvArray[i];
         cell2.textContent = critvals[i];
         cell3.textContent = signif[i];
     }
