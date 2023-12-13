@@ -34,6 +34,30 @@
                  value="0.05" min="0" max="1" step="0.01"
                  onChange="updateTable()">
         </p>
+        <p>
+          Which procedure should be run? Benjamini-Yekutieli is more
+          conservative, but is appropriate if the tests generating the p-values
+          are not independent.<br />
+
+          <label>
+            <input type = "radio"
+                   name = "procedure"
+                   value = "hochberg"
+                   id = "hochberg"
+                   checked
+                   onChange = "updateTable()">
+            Benjamini-Hochberg
+          </label>
+
+          <label>
+            <input type = "radio"
+                   name = "procedure"
+                   value = "yekutieli"
+                   id = "yekutieli"
+                   onChange = "updateTable()">
+            Benjamini-Yekutieli
+          </label>
+        </p>
 
         <p>
           By checking the box below, the output will be sorted by p-value. This

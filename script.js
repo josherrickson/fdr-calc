@@ -2,8 +2,6 @@ function updateTable() {
     const resultTable = document.getElementById("resultTable");
     const alpha = document.getElementById("alpha");
 
-    //
-
     // Get p-values and clean them
     const pvalues = document.getElementById("pvalues");
     // Split string and convert to numeric
@@ -25,9 +23,13 @@ function updateTable() {
     }
 
     // Define critical values
-    let critvals = ranks.map(x => x*alpha.valueAsNumber/pvArray.length);
+    const numpvals = pvArray.length
+    let critvals = ranks.map(x => x*alpha.valueAsNumber/numpvals);
+    const digamma1 = -0.5772156649015328606065120900824024310421593359399
+    if (yekutieli.checked) {
+        critvals = critvals.map(x => x / (Math.log(numpvals) - digamma1 + 1/(2*numpvals)))
+    }
     critvals = critvals.map(x => Math.round(x*1000)/1000);
-    console.log(critvals)
 
 
     // Get significance
