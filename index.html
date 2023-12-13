@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>False Discovery Rate</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
   </head>
   <body>
     <h1>False Discovery Rate procedures</h1>
@@ -95,8 +96,11 @@
     <div id="results-div">
       <table id="resultTable" border="1" class = "hoverTable">
       </table>
+
+      <div id="plot-container"></div>
     </div>
 
+    <script src="plot.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

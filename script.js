@@ -11,15 +11,26 @@ function updateTable() {
     // Drop outside of (0,1]
     pvArray = pvArray.filter(element => element > 0 & element <= 1);
 
+    // generate entry numbers
+    let numbers = pvArray.map((_, index) => index + 1);
 
     // Generate Ranks
     const sortpvals = document.getElementById("sortpvals");
     let ranks
+    let tmparray;
     if (sortpvals.checked) {
-        pvArray.sort((a, b) => a - b);
+        // Need to sort both pvalues and entry numbers
+        tmparray = [pvArray, numbers];
+        tmparray = tmparray.map(
+            (indices => a => indices.map(i => a[i]))
+            ([...tmparray[0].keys()].sort((a, b) => tmparray[0][a] - tmparray[0][b]))
+        )
+        pvArray = tmparray[0];
+        numbers = tmparray[1];
         ranks = pvArray.map((_, index) => index + 1);
     } else {
         ranks = getRankingWithoutSorting(pvArray)
+        numbers = pvArray.map((_, index) => index + 1);
     }
 
     // Define critical values
@@ -35,7 +46,6 @@ function updateTable() {
     // Get significance
     let largest = 0;
     for (let i = 0; i < pvArray.length; i++) {
-        console.log(largest)
         if (pvArray[i] <= critvals[i] && (pvArray[i] > largest)) {
             largest = pvArray[i];
         }
@@ -46,9 +56,9 @@ function updateTable() {
 
     // Reset table
     if (yekutieli.checked) {
-        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> rank </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
     } else {
-        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> B-H Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> rank </th> <th style="text-align: center;"> B-K Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
     }
 
     // Fill up the table
@@ -61,13 +71,18 @@ function updateTable() {
         const cell1 = row.insertCell(1);
         const cell2 = row.insertCell(2);
         const cell3 = row.insertCell(3);
+        const cell4 = row.insertCell(4);
 
         // Set the content of the cell to the current number
-        cell0.textContent = ranks[i];
+        cell0.textContent = numbers[i];
         cell1.textContent = pvArray[i];
-        cell2.textContent = critvals[i];
-        cell3.textContent = signif[i];
+        cell2.textContent = ranks[i];
+        cell3.textContent = critvals[i];
+        cell4.textContent = signif[i];
     }
+
+    drawPlot(numbers, pvArray, ranks, critvals, signif, width, height);
+
 }
 
 function getRankingWithoutSorting(array, ascending = true) {
@@ -93,3 +108,15 @@ function getRankingWithoutSorting(array, ascending = true) {
 document.addEventListener('DOMContentLoaded', function() {
     updateTable()
 }, false);
+
+
+// Set up the SVG container
+const margin = {top: 10, right: 30, bottom: 30, left: 60},
+      width = 600 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
+const svg = d3.select("#plot-container").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
