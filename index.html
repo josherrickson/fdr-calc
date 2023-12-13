@@ -5,51 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>False Discovery Rate</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-          crossorigin="anonymous">
   </head>
   <body>
     <h1>False Discovery Rate procedures</h1>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-            crossorigin="anonymous"></script>
-    <div class="container text-center">
-      <div class="row">
-        <div class="col">
-          <p>To control the False Discover Rate across a series of tests, enter
+    <div id="sidebar-div">
+      <div id="sidebar-div-content">
+        <p>To control the False Discover Rate across a series of tests, enter
           here a list of p-values (separated by commas). Additionally, you may
           choose your alpha parameter, which is the proportion of false
-            positives among all tests performed.</p>
+          positives among all tests performed.</p>
 
-          <p>
-            p-values:
-            <input type="text" id="pvalues" class="form-control"
-                   aria-describedby="p-valuesBlock"
-                   value=".01, .05, .03, .2, .001"
-                   onChange="updateTable()">
-            (Non-numeric inputs and p-values outside of (0,1] are ignored.)
-          </p>
+        <p>
+          <label>p-values:</label><br />
+          <input type="text"
+                 id="pvalues"
+                 class="form-control"
+                 aria-describedby="p-valuesBlock"
+                 value=".01, .05, .03, .2, .001"
+                 onChange="updateTable()">
+          (Non-numeric inputs and p-values outside of (0,1] are ignored.)
+        </p>
 
-          <p>
-            False Discovery Rate (alpha):
-            <input id="alpha" type="number" class="form-control" value="0.05" min="0" max="1" step="0.01" onChange="updateTable()">
-          </p>
+        <p>
+          <label>False Discovery Rate (alpha):</label><br />
+          <input id="alpha"
+                 type="number"
+                 class="form-control"
+                 value="0.05" min="0" max="1" step="0.01"
+                 onChange="updateTable()">
+        </p>
 
-          <p>
-            <input type="checkbox" value="sortpvals" id="sortpvals" checked onChange="updateTable()">Sort p-values?
-          </p>
-          <button type = "button" onclick="updateTable()">Submit</button>
-        </div>
-        <div class="col-8">
-          <table id="resultTable" border="1">
-          </table>
-        </div>
+        <p>
+          By checking the box below, the output will be sorted by p-value. This
+          may make it more clear what the B-H procedure is doing (especially in
+          the plot). This is for display purposes only and does not affect the
+          calculations.<br />
+          <input type="checkbox"
+                 value="sortpvals"
+                 id="sortpvals"
+                 checked
+                 onChange="updateTable()">Sort p-values?
+        </p>
+        <!-- <button type = "button" onclick="updateTable()">Submit</button> -->
+
+        <p>
+          The <strong>Benjamini-Hochberg</strong> procedure works by first
+          sorting all p-values in order from smallest to largest and giving them
+          ranks (e.g. the first has rank 1, the second rank 2, etc). For each
+          p-value, a critical value is calculated as alpha*rank/(# tests). The
+          largest p-value for which this critical value is greater than the
+          p-value is identified, and all p-values from the smallest through the
+          identified p-value are determined to be statistically significant.
+        </p>
+
+        <p>
+          The <strong>Benjamini-Yekutieli</strong> procedure works in a similar
+          fashion, but the critical value is scaled down by an additional factor
+          which is a function of the number of p-values calculated. The
+          Benjamini-Hochberg assumes that the tests are independent of each
+          other; whereas Benjamini-Yekutieli is appropriate if that assumption
+          is not valid.
+        </p>
       </div>
+    </div>
+    <div id="results-div">
+      <table id="resultTable" border="1">
+      </table>
     </div>
 
     <script src="script.js"></script>
