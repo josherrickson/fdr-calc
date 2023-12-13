@@ -148,6 +148,7 @@ const svg = d3.select("#plot-container").append("svg")
 d3.select("#sortpvals").on("change", redraw);
 d3.select("#hochberg").on("change", redraw);
 d3.select("#yekutieli").on("change", redraw);
+d3.select("#alpha").on("change", redraw);
 d3.select("#pvalues").on("input", redraw);
 
 function redraw() {
@@ -165,7 +166,7 @@ function redraw() {
         .call(d3.axisLeft(y));
 
     console.log("Updating plot?");
-    svg.selectAll("circle")
+    let circle = svg.selectAll("circle")
         .data(data)
         .join("circle")
         .attr("cx", function (d, i) { return x(i + 1); } )
@@ -173,7 +174,9 @@ function redraw() {
         .attr("r", 4)
         .style("fill", d => (d.signif === "Yes") ? "blue" : "red");
 
-    svg.append("path")
+    circle.exit().remove();
+
+    let path = svg.selectAll("path")
         .datum(data)
         .attr("fill", "none")
         .attr("stroke", "black")
@@ -182,6 +185,9 @@ function redraw() {
               .x(function(d, i) { return x(i + 1) })
               .y(function(d) { return y(d.critval) })
              )
+
+    circle.exit().remove();
+    path.exit().remove();
 }
 
 // Draw plot when page loads
