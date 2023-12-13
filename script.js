@@ -3,12 +3,12 @@ let alpha = document.getElementById("alpha");
 let sortpvals = document.getElementById("sortpvals");
 
 let pvalues = document.getElementById("pvalues");
-let pvArray;
-let numbers;
-let ranks;
-let critvals;
-let signif;
-let data;
+let pvArray = Array(pvalues.length).fill(0);
+let numbers = Array(pvalues.length).fill(0);
+let ranks = Array(pvalues.length).fill(0);
+let critvals = Array(pvalues.length).fill(0);
+let signif = Array(pvalues.length).fill(0);
+let data = Array(pvalues.length).fill(0);
 
 function makeDataTableElements() {
     pvArray = pvalues.value.split(",").map(Number);
@@ -151,21 +151,22 @@ d3.select("#yekutieli").on("change", redraw);
 d3.select("#alpha").on("change", redraw);
 d3.select("#pvalues").on("input", redraw);
 
+// Hardcoding in the domains with the default values.
+const x = d3.scaleLinear()
+      .domain([1, 5])
+      .range([40, width - 40]);
+let xaxis = svg.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x).ticks(5));
+
+const y = d3.scaleLinear()
+      .domain([0, .2])
+      .range([height - 40, 40]);
+let yaxis = svg.append("g")
+    .call(d3.axisLeft(y));
+
 function redraw() {
-    const x = d3.scaleLinear()
-          .domain([1, pvArray.length])
-          .range([40, width - 40]);
-    svg.append("g")
-        .attr("transform", `translate(0, ${height})`)
-        .call(d3.axisBottom(x));
 
-    const y = d3.scaleLinear()
-          .domain([0, Math.max(...pvArray.concat(critvals))])
-          .range([height - 40, 40]);
-    svg.append("g")
-        .call(d3.axisLeft(y));
-
-    console.log("Updating plot?");
     let circle = svg.selectAll("circle")
         .data(data)
         .join("circle")
@@ -173,8 +174,6 @@ function redraw() {
         .attr("cy", function (d) { return y(d.pv); } )
         .attr("r", 4)
         .style("fill", d => (d.signif === "Yes") ? "blue" : "red");
-
-    circle.exit().remove();
 
     let path = svg.selectAll("path")
         .datum(data)
@@ -188,6 +187,10 @@ function redraw() {
 
     circle.exit().remove();
     path.exit().remove();
+    x.domain([1, pvArray.length])
+    xaxis.transition().duration(0).call(d3.axisBottom(x).ticks(pvArray.length))
+    y.domain([0, Math.max(...pvArray.concat(critvals))])
+    yaxis.transition().duration(0).call(d3.axisLeft(y))
 }
 
 // Draw plot when page loads
