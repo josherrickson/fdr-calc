@@ -73,8 +73,8 @@ document.addEventListener("DOMContentLoaded", makeDataTableElements);
 
 // Track any changes in input
 pvalues.addEventListener("input", makeDataTableElements);
-// Most of the change trackers are in the HTML, but for this one, this approach
-// makes it more instanteous
+alpha.addEventListener("input", makeDataTableElements);
+// Adding a second track here makes it more instantaneous
 
 function updateTable() {
 
@@ -133,12 +133,29 @@ let myChart = new Chart(ctx, {
     data: {
         labels: Array.from({length: pvArray.length}, (_, i) => i + 1),
         datasets: [
-                {
-                    data: pvArray
-                }
+            {
+                type: 'scatter',
+                data: pvArray
+            },
+            {
+                type: 'line',
+                data: critvals,
+                xAxisID: 'x2', // Specify to which axes to link
+//                pointStyle: false, // Switch to this one to keep tooltips
+                pointRadius: 0
+            }
         ]
     },
     options: {
+        scales: {
+            x: {
+                display: false
+            },
+            x2: { // add extra axes
+                position: 'bottom',
+                type: 'category'
+            }
+        },
         responsive: false,
         plugins: {
             legend: {
@@ -149,6 +166,7 @@ let myChart = new Chart(ctx, {
 });
 
 function updateChart() {
+    myChart.data.datasets[1].data = critvals
     myChart.data.datasets[0].data = pvArray
     myChart.data.labels = Array.from({length: pvArray.length}, (_, i) => i + 1)
     myChart.update();
@@ -156,4 +174,4 @@ function updateChart() {
 
 document.addEventListener("DOMContentLoaded", updateChart);
 pvalues.addEventListener("input", updateChart);
-//sortpvals.addEventListener("input", updateChart);
+alpha.addEventListener("input", updateChart);
