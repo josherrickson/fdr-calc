@@ -184,3 +184,38 @@ function updateChart() {
 document.addEventListener("DOMContentLoaded", updateChart);
 pvalues.addEventListener("input", updateChart);
 alpha.addEventListener("input", updateChart);
+
+
+// Quick and simple export target #table_id into a csv
+// From https://stackoverflow.com/a/56370447
+function download_table_as_csv(table_id) {
+    let rows = document.querySelectorAll('table#' + table_id + ' tr');
+    let csv = [];
+
+    for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll('td, th');
+        for (let j = 0; j < cols.length; j++) {
+            // Clean innertext to remove multiple spaces and jumpline
+            let rowdata = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '')
+                .replace(/(\s\s)/gm, ' ')
+            // Escape double-quote with double-double-quote
+            // (see https://stackoverflow.com/a/17808731)
+            rowdata = rowdata.replace(/"/g, '""');
+            // Push escaped string
+            row.push('"' + rowdata + '"');
+        }
+        csv.push(row.join(','));
+    }
+    let csv_string = csv.join('\n');
+    // Download it
+    let filename = 'export_' + table_id + '_' +
+        new Date().toLocaleDateString() + '.csv';
+    let link = document.createElement('a');
+    link.style.display = 'none';
+    link.style.visibility = 'none'; // This is needed for Safari allegedly
+    link.setAttribute('target', '_blank');
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' +
+                      encodeURIComponent(csv_string));
+    link.setAttribute('download', filename);
+    link.click();
+}
