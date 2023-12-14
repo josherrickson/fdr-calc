@@ -187,8 +187,32 @@ let myChart = new Chart(ctx, {
             }
 
         },
+
         responsive: false,
         plugins: {
+            tooltip: {
+                callbacks: {
+                    title: function() { return ""},
+                    beforeLabel: function(tooltipItem) {
+                        let nbstring = "Number: " +
+                            numbers[tooltipItem.dataIndex];
+                        let pvstring = "p-value: " +
+                            pvArray[tooltipItem.dataIndex];
+                        let rkstring = "Rank: " +
+                            ranks[tooltipItem.dataIndex];
+                        let cvstring = "Crit Value: " +
+                            critvals[tooltipItem.dataIndex];
+r                        return [nbstring,
+                                pvstring,
+                                rkstring,
+                                cvstring];
+                    },
+                    label: function(tooltipItem) {
+                        return "Significant: " +
+                            signif[tooltipItem.dataIndex];
+                    }
+                }
+            },
             legend: {
                 display: false
             }
