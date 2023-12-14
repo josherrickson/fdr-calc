@@ -202,7 +202,7 @@ let myChart = new Chart(ctx, {
                             ranks[tooltipItem.dataIndex];
                         let cvstring = "Crit Value: " +
                             critvals[tooltipItem.dataIndex];
-r                        return [nbstring,
+                        return [nbstring,
                                 pvstring,
                                 rkstring,
                                 cvstring];
