@@ -161,8 +161,31 @@ let myChart = new Chart(ctx, {
             },
             x2: { // add extra axes
                 position: 'bottom',
-                type: 'category'
+                type: 'category',
+                title: {
+                    display: true,
+                    text: 'Number',
+                    font: {
+                        size: 15
+                    }
+                },
+                ticks: {
+                    // Label x-axis with "numbers", even though we plot 1-n
+                    callback: function(value, index, ticks) {
+                        return numbers[index]
+1                    }
+                }
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'p-value',
+                    font: {
+                        size: 15
+                    }
+                }
             }
+
         },
         responsive: false,
         plugins: {
