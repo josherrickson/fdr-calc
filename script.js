@@ -138,9 +138,10 @@ let myChart = new Chart(ctx, {
                 data: pvArray,
                 pointBackgroundColor: function(context) {
                     let index = context.dataIndex;
-                    return signif[index] === "Yes" ? 'red' : 'green';
+                    return signif[index] === "Yes" ? 'blue' : 'red';
                 },
-                pointRadius: 5
+                pointRadius: 8,
+                borderWidth: 0
 
             },
             {
@@ -148,7 +149,8 @@ let myChart = new Chart(ctx, {
                 data: critvals,
                 xAxisID: 'x2', // Specify to which axes to link
 //                pointStyle: false, // Switch to this one to keep tooltips
-                pointRadius: 0
+                pointRadius: 0,
+                borderColor: "black"
             }
         ]
     },
