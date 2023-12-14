@@ -80,9 +80,9 @@ function updateTable() {
 
     // Reset table
     if (yekutieli.checked) {
-        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> rank </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
     } else {
-        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> rank </th> <th style="text-align: center;"> B-H Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+        resultTable.innerHTML = '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> B-H Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
     }
 
     // Fill up the table
@@ -127,71 +127,33 @@ function getRankingWithoutSorting(array, ascending = true) {
 }
 
 
-// Set up the SVG container
-const margin = {top: 10, right: 30, bottom: 30, left: 60},
-      width = 600 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+let ctx = document.getElementById("myChart").getContext("2d");
+let myChart = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+        labels: Array.from({length: pvArray.length}, (_, i) => i + 1),
+        datasets: [
+                {
+                    data: pvArray
+                }
+        ]
+    },
+    options: {
+        responsive: false,
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
 
-const svg = d3.select("#plot-container").append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-// Convert to a single array
-
-// Set up scales
-
-
-// Create line plot
-
-d3.select("#sortpvals").on("change", redraw);
-d3.select("#hochberg").on("change", redraw);
-d3.select("#yekutieli").on("change", redraw);
-d3.select("#alpha").on("change", redraw);
-d3.select("#pvalues").on("input", redraw);
-
-// Hardcoding in the domains with the default values.
-const x = d3.scaleLinear()
-      .domain([1, 5])
-      .range([40, width - 40]);
-let xaxis = svg.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(d3.axisBottom(x).ticks(5));
-
-const y = d3.scaleLinear()
-      .domain([0, .2])
-      .range([height - 40, 40]);
-let yaxis = svg.append("g")
-    .call(d3.axisLeft(y));
-
-function redraw() {
-
-    let circle = svg.selectAll("circle")
-        .data(data)
-        .join("circle")
-        .attr("cx", function (d, i) { return x(i + 1); } )
-        .attr("cy", function (d) { return y(d.pv); } )
-        .attr("r", 4)
-        .style("fill", d => (d.signif === "Yes") ? "blue" : "red");
-
-    let path = svg.selectAll("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr("stroke-width", 1.5)
-        .attr("d", d3.line()
-              .x(function(d, i) { return x(i + 1) })
-              .y(function(d) { return y(d.critval) })
-             )
-
-    circle.exit().remove();
-    path.exit().remove();
-    x.domain([1, pvArray.length])
-    xaxis.transition().duration(0).call(d3.axisBottom(x).ticks(pvArray.length))
-    y.domain([0, Math.max(...pvArray.concat(critvals))])
-    yaxis.transition().duration(0).call(d3.axisLeft(y))
+function updateChart() {
+    myChart.data.datasets[0].data = pvArray
+    myChart.data.labels = Array.from({length: pvArray.length}, (_, i) => i + 1)
+    myChart.update();
 }
 
-// Draw plot when page loads
-document.addEventListener("DOMContentLoaded", redraw);
+document.addEventListener("DOMContentLoaded", updateChart);
+pvalues.addEventListener("input", updateChart);
+//sortpvals.addEventListener("input", updateChart);

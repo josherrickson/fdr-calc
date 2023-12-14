@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>False Discovery Rate</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+     <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <h1>False Discovery Rate procedures</h1>
@@ -70,7 +69,7 @@
                    value="sortpvals"
                    id="sortpvals"
                    checked
-                   onChange="makeDataTableElements()">Sort p-values?
+                   onChange="makeDataTableElements(); updateChart()">Sort p-values?
           </label>
         </p>
         <!-- <button type = "button" onclick="updateTable()">Submit</button> -->
@@ -99,9 +98,12 @@
       <table id="resultTable" border="1" class = "hoverTable">
       </table>
 
-      <div id="plot-container"></div>
+      <div>
+        <canvas id="myChart" width="400" height="300"></canvas>
+      </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
