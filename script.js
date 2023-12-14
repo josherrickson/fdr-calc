@@ -173,7 +173,7 @@ let myChart = new Chart(ctx, {
                     // Label x-axis with "numbers", even though we plot 1-n
                     callback: function(value, index, ticks) {
                         return numbers[index]
-1                    }
+                    }
                 }
             },
             y: {
