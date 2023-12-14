@@ -98,9 +98,24 @@
       <table id="resultTable" border="1" class = "hoverTable">
       </table>
 
+      <p>
+        In this plot, the p-values are represented by the points (values on the
+        x-axis correspond to Row No. in the above table). The line represents
+        the Benjamini-Hochberg critical values. The largest p-value at or below
+        the line and all p-values smaller than that one are deemed to be
+        significant. (Much more visually obvious if the "Sort p-values" option
+        is checked.)
+      </p>
+
       <div>
         <canvas id="myChart" width="400" height="300"></canvas>
       </div>
+
+      <p>
+        It can occur that a p-value smaller than the largest p-value below the
+        critical value is itself larger than its own critical value. This does
+        not represent the problem, nor make the p-value fail to reject.
+      </p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.js"></script>

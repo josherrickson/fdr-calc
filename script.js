@@ -135,7 +135,13 @@ let myChart = new Chart(ctx, {
         datasets: [
             {
                 type: 'scatter',
-                data: pvArray
+                data: pvArray,
+                pointBackgroundColor: function(context) {
+                    let index = context.dataIndex;
+                    return signif[index] === "Yes" ? 'red' : 'green';
+                },
+                pointRadius: 5
+
             },
             {
                 type: 'line',
@@ -165,9 +171,10 @@ let myChart = new Chart(ctx, {
     }
 });
 
+
 function updateChart() {
-    myChart.data.datasets[1].data = critvals
     myChart.data.datasets[0].data = pvArray
+    myChart.data.datasets[1].data = critvals
     myChart.data.labels = Array.from({length: pvArray.length}, (_, i) => i + 1)
     myChart.update();
 }
