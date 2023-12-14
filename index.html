@@ -1,37 +1,46 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>False Discovery Rate</title>
-     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <h1>False Discovery Rate procedures</h1>
     <div id="sidebar-div">
       <div id="sidebar-div-content">
-        <p>To control the False Discover Rate across a series of tests, enter
+        <p>
+          To control the False Discover Rate across a series of tests, enter
           here a list of p-values (separated by commas). Additionally, you may
           choose your alpha parameter, which is the proportion of false
-          positives among all tests performed.</p>
+          positives among all tests performed.
+        </p>
 
         <p>
           <label for="values">p-values:</label><br />
-          <input type="text"
-                 id="pvalues"
-                 class="form-control"
-                 value=".01, .05, .03, .2, .001"
-                   onChange="makeDataTableElements(); updateChart()">
+          <input
+            type="text"
+            id="pvalues"
+            class="form-control"
+            value=".01, .05, .03, .2, .001"
+            onChange="makeDataTableElements(); updateChart()"
+          />
           (Non-numeric inputs and p-values outside of (0,1] are ignored.)
         </p>
 
         <p>
           <label for="alpha">False Discovery Rate (alpha):</label><br />
-          <input id="alpha"
-                 type="number"
-                 class="form-control"
-                 value="0.05" min="0" max="1" step="0.01"
-                   onChange="makeDataTableElements(); updateChart()">
+          <input
+            id="alpha"
+            type="number"
+            class="form-control"
+            value="0.05"
+            min="0"
+            max="1"
+            step="0.01"
+            onChange="makeDataTableElements(); updateChart()"
+          />
         </p>
         <p>
           Which procedure should be run? Benjamini-Yekutieli is more
@@ -39,21 +48,25 @@
           are not independent.<br />
 
           <label>
-            <input type = "radio"
-                   name = "procedure"
-                   value = "hochberg"
-                   id = "hochberg"
-                   checked
-                   onChange="makeDataTableElements(); updateChart()">
+            <input
+              type="radio"
+              name="procedure"
+              value="hochberg"
+              id="hochberg"
+              checked
+              onChange="makeDataTableElements(); updateChart()"
+            />
             Benjamini-Hochberg
           </label>
 
           <label>
-            <input type = "radio"
-                   name = "procedure"
-                   value = "yekutieli"
-                   id = "yekutieli"
-                   onChange="makeDataTableElements(); updateChart()">
+            <input
+              type="radio"
+              name="procedure"
+              value="yekutieli"
+              id="yekutieli"
+              onChange="makeDataTableElements(); updateChart()"
+            />
             Benjamini-Yekutieli
           </label>
         </p>
@@ -64,10 +77,12 @@
           the plot). This is for display purposes only and does not affect the
           calculations.<br />
           <label>
-            <input type="checkbox"
-                   value="sortpvals"
-                   id="sortpvals"
-                   onChange="makeDataTableElements(); updateChart()">
+            <input
+              type="checkbox"
+              value="sortpvals"
+              id="sortpvals"
+              onChange="makeDataTableElements(); updateChart()"
+            />
             Sort p-values?
           </label>
         </p>
@@ -94,13 +109,10 @@
       </div>
     </div>
     <div id="results-div">
-      <table id="resultTable" class = "hoverTable">
-      </table>
-      <button type = "button"
-              onclick="downloadTableAsCSV('resultTable');">
+      <table id="resultTable" class="hoverTable"></table>
+      <button type="button" onclick="downloadTableAsCSV('resultTable');">
         Download as CSV
       </button>
-
 
       <p>
         In this plot, the p-values are represented by the points (values on the
