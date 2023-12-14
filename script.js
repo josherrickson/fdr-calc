@@ -147,13 +147,13 @@ const myChart = new Chart(ctx, {
         type: "line",
         data: critvals,
         xAxisID: "x2", // Specify to which axes to link
-        //                pointStyle: false, // Switch to this one to keep tooltips
         pointRadius: 0,
         borderColor: "black",
       },
     ],
   },
   options: {
+    devicePixelRatio: 4, // fixes blurry-on-firefox issue
     scales: {
       x: {
         display: false,
