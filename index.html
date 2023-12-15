@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>False Discovery Rate</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     <h1>False Discovery Rate procedures</h1>
@@ -18,19 +18,19 @@
         </p>
 
         <p>
-          <label for="values">p-values:</label><br />
+          <label for="pvalues">p-values:</label><br>
           <input
             type="text"
             id="pvalues"
             class="form-control"
             value=".01, .05, .03, .2, .001"
             onChange="makeDataTableElements(); updateChart()"
-          />
+         >
           (Non-numeric inputs and p-values outside of (0,1] are ignored.)
         </p>
 
         <p>
-          <label for="alpha">False Discovery Rate (alpha):</label><br />
+          <label for="alpha">False Discovery Rate (alpha):</label><br>
           <input
             id="alpha"
             type="number"
@@ -40,12 +40,12 @@
             max="1"
             step="0.01"
             onChange="makeDataTableElements(); updateChart()"
-          />
+         >
         </p>
         <p>
           Which procedure should be run? Benjamini-Yekutieli is more
           conservative, but is appropriate if the tests generating the p-values
-          are not independent.<br />
+          are not independent.<br>
 
           <label>
             <input
@@ -55,7 +55,7 @@
               id="hochberg"
               checked
               onChange="makeDataTableElements(); updateChart()"
-            />
+           >
             Benjamini-Hochberg
           </label>
 
@@ -66,7 +66,7 @@
               value="yekutieli"
               id="yekutieli"
               onChange="makeDataTableElements(); updateChart()"
-            />
+           >
             Benjamini-Yekutieli
           </label>
         </p>
@@ -75,14 +75,14 @@
           By checking the box below, the output will be sorted by p-value. This
           may make it more clear what the B-H procedure is doing (especially in
           the plot). This is for display purposes only and does not affect the
-          calculations.<br />
+          calculations.<br>
           <label>
             <input
               type="checkbox"
               value="sortpvals"
               id="sortpvals"
               onChange="makeDataTableElements(); updateChart()"
-            />
+           >
             Sort p-values?
           </label>
         </p>
