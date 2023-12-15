@@ -11,6 +11,7 @@ let numbers = Array(pvalues.length).fill(0);
 let ranks = Array(pvalues.length).fill(0);
 let critvals = Array(pvalues.length).fill(0);
 let signif = Array(pvalues.length).fill(0);
+let adjpv = Array(pvalues.length).fill(0);
 
 function makeDataTableElements() {
   pvArray = pvalues.value.split(",").map(Number);
@@ -37,11 +38,10 @@ function makeDataTableElements() {
     );
     pvArray = tmparray[0];
     numbers = tmparray[1];
-    ranks = pvArray.map((_, index) => index + 1);
   } else {
-    ranks = getRankingWithoutSorting(pvArray);
     numbers = pvArray.map((_, index) => index + 1);
   }
+  ranks = getRankingWithoutSorting(pvArray);
 
   // Define critical values
   const numpvals = pvArray.length;
@@ -63,6 +63,16 @@ function makeDataTableElements() {
   signif = pvArray.map((x) => x <= largest);
   signif = signif.map((value) => (value ? "Yes" : "No"));
 
+  const mpj = pvArray.map((value, index) =>
+    value * pvArray.length / (ranks[index] + 1) );
+
+  for (let i = 0; i < mpj.length; i++) {
+    const currentEntry = mpj[i];
+    const minimum = Math.min(...mpj.slice(i));
+    adjpv.push(minimum);
+  }
+
+
   updateTable();
 }
 
@@ -78,10 +88,10 @@ function updateTable() {
   // Reset table
   if (yekutieli.checked) {
     resultTable.innerHTML =
-      '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+      '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> B-Y Critical Value </th> <th style="text-align: center;"> Significant? </th> <th> adjpv </th> </tr> </thead> ';
   } else {
     resultTable.innerHTML =
-      '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> B-H Critical Value </th> <th style="text-align: center;"> Significant? </th> </tr> </thead> ';
+      '<thead> <tr> <th style="text-align: center;"> Number </th> <th style="text-align: center;"> p-value </th> <th style="text-align: center;"> Rank </th> <th style="text-align: center;"> B-H Critical Value </th> <th style="text-align: center;"> Significant? </th> <th> adjpv </th> </tr> </thead> ';
   }
 
   // Fill up the table
@@ -95,6 +105,7 @@ function updateTable() {
     const cell2 = row.insertCell(2);
     const cell3 = row.insertCell(3);
     const cell4 = row.insertCell(4);
+    const cell5 = row.insertCell(5);
 
     // Set the content of the cell to the current number
     cell0.textContent = numbers[i];
@@ -102,6 +113,7 @@ function updateTable() {
     cell2.textContent = ranks[i];
     cell3.textContent = critvals[i];
     cell4.textContent = signif[i];
+    cell5.textContent = adjpv[i];
   }
 }
 

@@ -12,6 +12,13 @@ body {
   margin: 0;
 }
 
+@media (prefers-color-scheme: dark) {
+    body {
+        color: #F5F5F5;
+        background-color: rgb(75, 75, 75);
+    }
+}
+
 p {
   text-align: left;
 }
@@ -76,6 +83,13 @@ tr td:nth-child(4) {
   background-color: #e1e1e1;
 }
 
+@media (prefers-color-scheme: dark) {
+    .hoverTable tr:not(:first-child):hover {
+        background-color: #e1e1e1;
+        color: rgb(75, 75, 75);
+    }
+}
+
 /* #results-div { */
 /*     float:left; */
 /*     width:500px; */
@@ -92,12 +106,17 @@ tr td:nth-child(4) {
 }
 
 #sidebar-div-content {
-  background: #c9c;
   padding: 19px;
   margin-bottom: 20px;
   background-color: #f5f5f5;
   border: 1px solid #e3e3e3;
   border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+    #sidebar-div-content {
+        background-color: rgb(125, 125, 125);
+    }
 }
 
 label {
@@ -120,4 +139,17 @@ label {
   background-image: none;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .form-control {
+        background-color: #555;
+        color: #fff;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    canvas {
+        filter: invert(1) hue-rotate(180deg);
+    }
 }
