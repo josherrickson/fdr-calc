@@ -76,12 +76,12 @@ alpha.addEventListener('input', makeDataTableElements)
 
 function updateTable() {
   // Reset table
-  if (yekutieli.checked) {
-    resultTable.innerHTML =
-      '<thead> <tr> <th style="text-align: center"> Number </th> <th style="text-align: center"> p-value </th> <th style="text-align: center"> Rank </th> <th style="text-align: center"> B-Y Critical Value </th> <th style="text-align: center"> Significant? </th> </tr> </thead> '
-  } else {
-    resultTable.innerHTML =
-      '<thead> <tr> <th style="text-align: center"> Number </th> <th style="text-align: center"> p-value </th> <th style="text-align: center"> Rank </th> <th style="text-align: center"> B-H Critical Value </th> <th style="text-align: center"> Significant? </th> </tr> </thead> '
+  const critValHeader = document.getElementById('critValHeader')
+
+  critValHeader.innerHTML = yekutieli.checked ? 'B-Y Critical Value' : 'B-H Critical Value'
+
+  for (let i = resultTable.rows.length - 1; i > 0; i--) {
+    resultTable.deleteRow(i)
   }
 
   // Fill up the table
@@ -171,7 +171,7 @@ const myChart = new Chart(ctx, {
         },
         ticks: {
           // Label x-axis with 'numbers', even though we plot 1-n
-          callback: function (value, index, ticks) {
+          callback: function (_value, index) {
             return numbers[index]
           },
         },

@@ -109,7 +109,17 @@
       </div>
     </div>
     <div id="results-div">
-      <table id="resultTable" class="hoverTable"></table>
+      <table id="resultTable" class="hoverTable">
+        <thead>
+          <tr>
+            <th>Number</th>
+            <th>p-value</th>
+            <th>Rank</th>
+            <th id="critValHeader">B-H Critical Value</th>
+            <th>Significant?</th>
+          </tr>
+        </thead>
+      </table>
       <button type="button" onclick="downloadTableAsCSV('resultTable');">
         Download as CSV
       </button>
