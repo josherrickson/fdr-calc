@@ -1,29 +1,14 @@
-html {
-  font-family: sans-serif;
-}
-
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px !important;
   line-height: 1.42857143;
-  color: #333;
   margin: 0;
-}
-
-@media (prefers-color-scheme: dark) {
-    body {
-        color: #F5F5F5;
-        background-color: rgb(75, 75, 75);
-    }
-}
-
-p {
-  text-align: left;
+  max-width: none;
+  padding: 0 0 0 0;
 }
 
 h1 {
   font-size: 30px;
-  margin-top: 20px;
+  margin-top: 15px;
   margin-bottom: 10px;
   margin-left: 10px;
   font-family: inherit;
@@ -61,8 +46,7 @@ tr {
   border-collapse: collapse;
 }
 
-th,
-td {
+th, td {
   border: none;
   padding: 5px;
 }
@@ -90,12 +74,6 @@ tr td:nth-child(4) {
         color: rgb(75, 75, 75);
     }
 }
-
-/* #results-div { */
-/*     float:left; */
-/*     width:500px; */
-/*     background:#9c9; */
-/* } */
 
 #sidebar-div {
   float: left;
