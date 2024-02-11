@@ -98,7 +98,7 @@ tr td:nth-child(4) {
 
 @media only screen and (max-width: 700px) {
     #sidebar-div {
-        width: 100%;
+        width: 99%; /* 100% makes a horizontal scroll appear */
     }
 }
 
